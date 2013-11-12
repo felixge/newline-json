@@ -1,0 +1,20 @@
+{
+  "name": "newline-json-transform",
+  "version": "0.0.1",
+  "description": "New line separated JSON streaming",
+  "main": "index.js",
+  "scripts": {
+    "test": "node tests/test.js"
+  },
+  "keywords": [
+    "JSON",
+    "stream",
+    "streams2",
+    "new-line"
+  ],
+  "author": "",
+  "license": "BSD-2-Clause",
+  "devDependencies": {
+    "tap": "~0.4.4"
+  }
+}
