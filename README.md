@@ -1,4 +1,4 @@
-# newline-json-transform
+# newline-json
 
 Just like [JSONStream](https://github.com/dominictarr/JSONStream),
 but instead of streaming valid JSON arrays, it streams new-line separated
