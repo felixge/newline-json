@@ -1,7 +1,7 @@
 {
-  "name": "newline-json-transform",
+  "name": "newline-json",
   "version": "0.0.1",
-  "description": "New line separated JSON streaming",
+  "description": "New-line separated JSON streaming",
   "main": "index.js",
   "scripts": {
     "test": "node tests/test.js"
@@ -12,8 +12,7 @@
     "streams2",
     "new-line"
   ],
-  "author": "",
-  "license": "BSD-2-Clause",
+  "license": "MIT",
   "devDependencies": {
     "tap": "~0.4.4",
     "stream2buffer": "0.0.3"
