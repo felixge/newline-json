@@ -1,28 +1,42 @@
 var test = require('tap').test;
-var Readable = require('stream').Readable;
 var Parser = require('../').Parser;
 var Stringifier = require('../').Stringifier;
 var PassThrough = require('stream').PassThrough;
+var readable = require('./mocks/readable');
+var stream2buffer = require('stream2buffer');
 
-var n = 100;
-var nsjrs = new Readable();
-nsjrs._read = function _read () {
-  if (!--n)
-    this.push('{"this": "is", "js": "on"}\n');
-  else
-    this.push(null);
-}
+var expectedFinalBuffer;
+test('the mock readable stream works', function (t) {
+  var nsjrs = readable();
+  stream2buffer(nsjrs, function (err, buffer) {
+    t.equal(err, null);
+    buffer = buffer.toString();
+    t.equal(buffer.split(/\n/).length, 101, 'has 100 lines/objects');
+    expectedFinalBuffer = buffer;
+    t.end();
+  })
+});
 
 test('parses and stringifies', function (t) {
   var parser = new Parser();
-  nsjrs.pipe(parser);
+  var nsjrs = readable();
+  nsjrs.pipe(parser)
 
-  var tr = new PassThrough();
-  var stringifier = new Stringifier;
-  parser.pipe(tr);
-  tr.pipe(process.stdout);
+  var parsedLines = 0;
+  parser.on('data', function (data) {
+    parsedLines++;
+  });
 
-  tr.on('end', function () {
+  var stringifier = new Stringifier();
+  parser.pipe(stringifier);
+
+  var through = new PassThrough();
+  stringifier.pipe(through);
+
+  stream2buffer(through, function (err, buffer) {
+    t.equal(err, null);
+    t.equal(parsedLines, 100);
+    t.equal(buffer.toString(), expectedFinalBuffer);
     t.end();
   });
 });

@@ -1,38 +1,50 @@
+// shamelessly borrowed from http://nodejs.org/api/stream.html
+
 var util = require('util');
+var StringDecoder = require('string_decoder').StringDecoder;
 var Transform = require('stream').Transform;
 util.inherits(Parser, Transform);
 
 function Parser(options) {
-  if (!options)
-    options = {};
-
   if (!(this instanceof Parser))
     return new Parser(options);
 
   Transform.call(this, options);
   this._writableState.objectMode = false;
   this._readableState.objectMode = true;
-
-  this.buffer = [];
-  this.separator = /\n/;
+  this._buffer = '';
+  this._decoder = new StringDecoder('utf8');
 }
 
-Parser.prototype._transform = function(chunk, encoding, done) {
-  var chunkString = chunk.toString();
-  if (this.separator.test(chunkString)) {
-    var parts = chunkString.split(this.separator);
-    this.buffer.push(parts.shift());
-    this.push(JSON.parse(this.buffer.join(''))+'\n');
-    var nParts = parts.length;
-    for (var i = 0; i < nParts -1; i++) {
-      this.push(JSON.parse(parts.shift())+'\n');
+Parser.prototype._transform = function(chunk, encoding, cb) {
+  this._buffer += this._decoder.write(chunk);
+  var lines = this._buffer.split(/\r?\n/);
+  this._buffer = lines.pop();
+  for (var l = 0; l < lines.length; l++) {
+    var line = lines[l];
+    try {
+      var obj = JSON.parse(line);
+    } catch (er) {
+      this.emit('error', er);
+      return;
     }
-    this.buffer = [];
-    this.buffer.push(parts.shift());
-  } else
-    this.buffer.push(chunkString);
+    this.push(obj);
+  }
+  cb();
+};
 
-  done();
+Parser.prototype._flush = function(cb) {
+  var rem = this._buffer.trim();
+  if (rem) {
+    try {
+      var obj = JSON.parse(rem);
+    } catch (er) {
+      this.emit('error', er);
+      return;
+    }
+    this.push(obj);
+  }
+  cb();
 };
 
 module.exports = Parser;
