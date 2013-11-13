@@ -6,6 +6,10 @@
   "scripts": {
     "test": "node tests/test.js"
   },
+  "repository": {
+    "type": "git",
+    "url": "ssh://git@github.com/CrowdProcess/newline-json.git"
+  },
   "keywords": [
     "JSON",
     "stream",
