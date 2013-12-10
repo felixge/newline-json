@@ -3,6 +3,8 @@
 var util = require('util');
 var StringDecoder = require('string_decoder').StringDecoder;
 var Transform = require('stream').Transform;
+if (!Transform)
+  Transform = require('readable-stream').Transform; // for browsers and node pre-0.10
 util.inherits(Parser, Transform);
 
 function Parser(options) {

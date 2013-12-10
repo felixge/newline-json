@@ -20,5 +20,8 @@
   "devDependencies": {
     "tap": "~0.4.4",
     "stream2buffer": "0.0.3"
+  },
+  "dependencies": {
+    "readable-stream": "~1.1.9"
   }
 }
