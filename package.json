@@ -1,6 +1,6 @@
 {
   "name": "newline-json",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "New-line separated JSON streaming",
   "main": "index.js",
   "scripts": {
