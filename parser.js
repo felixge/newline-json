@@ -26,11 +26,11 @@ Parser.prototype._transform = function(chunk, encoding, cb) {
     var line = lines[l];
     try {
       var obj = JSON.parse(line);
+      this.push(obj);
     } catch (er) {
       this.emit('error', er);
       return;
     }
-    this.push(obj);
   }
   cb();
 };
@@ -40,11 +40,11 @@ Parser.prototype._flush = function(cb) {
   if (rem) {
     try {
       var obj = JSON.parse(rem);
+      this.push(obj);
     } catch (er) {
       this.emit('error', er);
       return;
     }
-    this.push(obj);
   }
   cb();
 };

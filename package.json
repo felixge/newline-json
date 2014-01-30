@@ -1,6 +1,6 @@
 {
   "name": "newline-json",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "New-line separated JSON streaming",
   "main": "index.js",
   "scripts": {
@@ -22,6 +22,6 @@
     "stream2buffer": "0.0.3"
   },
   "dependencies": {
-    "readable-stream": "~1.1.9"
+    "readable-stream": "~1.1.10"
   }
 }
