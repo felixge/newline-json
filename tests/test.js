@@ -40,3 +40,15 @@ test('parses and stringifies', function (t) {
     t.end();
   });
 });
+
+test('parse produces useful error messages', function (t) {
+  var parser = new Parser();
+  parser.on('error', function (err) {
+    var m = err.message;
+    t.ok(m.indexOf('Unexpected token E') > -1, "contains original");
+    t.ok(m.indexOf('Error:\\nhere\\nbe\\nstack') > -1, "contains context");
+    t.ok(m.indexOf('day') == -1, "excludes previous");
+    t.end();
+  });
+  parser.write('"one"\n"day"\nError:\nhere\nbe\nstack');
+});
